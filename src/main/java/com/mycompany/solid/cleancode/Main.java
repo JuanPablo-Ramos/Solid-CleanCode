@@ -47,8 +47,6 @@ public class Main extends javax.swing.JFrame {
         Confirm1 = new javax.swing.JButton();
         Confirm2 = new javax.swing.JButton();
         Confirm3 = new javax.swing.JButton();
-        Confirm4 = new javax.swing.JButton();
-        txtId = new javax.swing.JTextField();
         txtNameP = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
 
@@ -71,6 +69,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblProducts);
 
         btnAdd.setText("Add");
+        btnAdd.setEnabled(false);
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
@@ -118,21 +117,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        Confirm4.setText("Confirm");
-        Confirm4.setEnabled(false);
-        Confirm4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Confirm4ActionPerformed(evt);
-            }
-        });
-
-        txtId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdActionPerformed(evt);
-            }
-        });
-
-        txtNameP.setEnabled(false);
         txtNameP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNamePActionPerformed(evt);
@@ -157,28 +141,25 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(btnDelete)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtId)
-                    .addComponent(Confirm1))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNameP, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Confirm2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(Confirm1))
+                        .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Confirm3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(Confirm2)
+                            .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 48, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Confirm4)))
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12))
+                            .addComponent(Confirm3)
+                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,16 +179,14 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNameP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Confirm1)
                     .addComponent(Confirm2)
-                    .addComponent(Confirm3)
-                    .addComponent(Confirm4))
-                .addGap(18, 18, 18)
+                    .addComponent(Confirm3))
+                .addGap(38, 38, 38)
                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -240,46 +219,29 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void Confirm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm1ActionPerformed
-        NewId = txtId.getText();
 
-        txtId.setEnabled(false);
+        txtNameP.setEnabled(false);
         Confirm1.setEnabled(false);
-        txtNameP.setEnabled(true);
+        txtStock.setEnabled(true);
         Confirm2.setEnabled(true);
-
+        
     }//GEN-LAST:event_Confirm1ActionPerformed
 
     private void Confirm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm2ActionPerformed
-        NewNameP = txtNameP.getText();
-
-        txtNameP.setEnabled(false);
+        txtStock.setEnabled(false);
         Confirm2.setEnabled(false);
-        txtStock.setEnabled(true);
+        txtPrice.setEnabled(true);
         Confirm3.setEnabled(true);
     }//GEN-LAST:event_Confirm2ActionPerformed
 
     private void Confirm3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm3ActionPerformed
-        NewStock = txtStock.getText();
-
-        txtStock.setEnabled(false);
+        txtPrice.setEnabled(false);
         Confirm3.setEnabled(false);
-        txtPrice.setEnabled(true);
-        Confirm4.setEnabled(true);
+        btnAdd.setEnabled(true);
     }//GEN-LAST:event_Confirm3ActionPerformed
 
-    private void Confirm4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm4ActionPerformed
-        NewPrice = txtPrice.getText();
-
-        txtPrice.setEnabled(false);
-        Confirm4.setEnabled(false);
-    }//GEN-LAST:event_Confirm4ActionPerformed
-
-    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
-
-    }//GEN-LAST:event_txtIdActionPerformed
-
     private void txtNamePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamePActionPerformed
-
+        
     }//GEN-LAST:event_txtNamePActionPerformed
 
     /**
@@ -342,7 +304,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton Confirm1;
     private javax.swing.JButton Confirm2;
     private javax.swing.JButton Confirm3;
-    private javax.swing.JButton Confirm4;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSearch;
@@ -350,7 +311,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable tblProducts;
-    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNameP;
     private javax.swing.JTextField txtPrice;
     private javax.swing.JTextField txtSearch;
