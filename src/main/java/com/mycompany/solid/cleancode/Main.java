@@ -1,7 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+//Codigo hecho por Julian Mercado Narvaez y Juan Pablo Ramos
+//Tuvimos problemas a la hora de hacer usar el modelo de la tabla para actualizar una linea de codigo
 package com.mycompany.solid.cleancode;
 
 import java.awt.Color;
@@ -14,9 +12,6 @@ import javax.swing.table.TableRowSorter;
 
 
 public class Main extends javax.swing.JFrame {
-    
-    
-    
     DefaultCellEditor cellEditor = new DefaultCellEditor(new JTextField());
     
     private final ModelProductsTable dtm;
@@ -32,7 +27,7 @@ public class Main extends javax.swing.JFrame {
         
         dtm = (ModelProductsTable) tblProducts.getModel();
         
-        tblProducts.setDefaultEditor(Main.class, cellEditor);
+        
         
         this.getContentPane().setBackground(Color.CYAN);
        
