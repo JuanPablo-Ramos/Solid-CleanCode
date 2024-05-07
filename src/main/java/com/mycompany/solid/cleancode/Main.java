@@ -2,43 +2,96 @@
 //Tuvimos problemas a la hora de hacer usar el modelo de la tabla para actualizar una linea de codigo
 package com.mycompany.solid.cleancode;
 
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
-
+import org.bson.Document;
 
 public class Main extends javax.swing.JFrame {
+
+    private MongoDatabase mongodb;
+    private MongoCollection<Document> mongocollection;
+
+    public MongoClient createConnection() {
+        MongoClient mongo = null;
+        String server = "localhost";
+        Integer port = 27017;
+        try {
+            mongo = MongoClients.create(
+                    MongoClientSettings.builder()
+                            .applyToClusterSettings(builder
+                                    -> builder.hosts(Arrays.asList(new ServerAddress(server, port))))
+                            .build());
+            mongodb = mongo.getDatabase("SolidCleanCode");
+            mongocollection = mongodb.getCollection("Inventory");
+
+        } catch (MongoException e) {
+            JOptionPane.showMessageDialog(null, "Error in the Mongo Connetion, error: " + e.toString());
+        }
+        return mongo;
+    }
     
+    public List<Product> readDB(){
+        
+        List<Product> readList = new ArrayList();
+        for (Document doc: mongocollection.find()){
+         
+            Product p = new Product();
+            p.setProductId(doc.getInteger("Product Id"));
+            p.setName(doc.getString("Product Name"));
+            p.setPrice(doc.getDouble("Product Price").floatValue());
+            p.setStock(doc.getInteger("Stock Product"));
+            
+            readList.add(p);
+        
+        
+        }
+        return readList;
+    }
     
+    public void add_product(Product p){
+        
+        Document doc = new Document();
+        doc.put("Product Id", p.getProductId());
+        doc.put("Product Name", p.getName());
+        doc.put("Product Price", p.getPrice());
+        doc.put("Stock Product", p.getStock());
+        
+        mongocollection.insertOne(doc);
+    }
     
-    
-    DefaultCellEditor cellEditor = new DefaultCellEditor(new JTextField());
-    
+
     private final ModelProductsTable dtm;
-    
+
     private int SelectedRow;
-    
+
     List<Product> products = new ArrayList<>();
     TableRowSorter<ModelProductsTable> tableRowSorter = new TableRowSorter<>();
-    
+
     public Main() {
+        
+        createConnection();
+        
         initComponents();
         initObjects();
-        
-        dtm = (ModelProductsTable) tblProducts.getModel();
-        
-        
-        
-        this.getContentPane().setBackground(Color.CYAN);
-       
-        
 
-   
+        dtm = (ModelProductsTable) tblProducts.getModel();
+
+        this.getContentPane().setBackground(Color.CYAN);
+
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -435,15 +488,19 @@ public class Main extends javax.swing.JFrame {
         p.setStock(Integer.valueOf(txtStock.getText()));
         p.setPrice(Float.parseFloat(txtPrice.getText()));
         
+        add_product(p);
+
         productModel.AddProduct(p);
         
+        
+
 
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         ModelProductsTable productModel = (ModelProductsTable) this.tblProducts.getModel();
         productModel.removeProduct();
-            
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -458,7 +515,7 @@ public class Main extends javax.swing.JFrame {
         Confirm1.setEnabled(false);
         txtStock.setEnabled(true);
         Confirm2.setEnabled(true);
-        
+
     }//GEN-LAST:event_Confirm1ActionPerformed
 
     private void Confirm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm2ActionPerformed
@@ -475,7 +532,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_Confirm3ActionPerformed
 
     private void txtProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductActionPerformed
-        
+
     }//GEN-LAST:event_txtProductActionPerformed
 
     private void txtProductSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductSActionPerformed
@@ -483,10 +540,10 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txtProductSActionPerformed
 
     private void btnAddNewpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewpActionPerformed
-       dtm.setValueAt(txtNewId.getText().trim(), SelectedRow, 0);
-       dtm.setValueAt(txtProductS.getText().trim(), SelectedRow, 1);
-       dtm.setValueAt(txtStockS.getText().trim(), SelectedRow, 2);
-       dtm.setValueAt(txtPriceS.getText().trim(), SelectedRow, 3);
+        dtm.setValueAt(txtNewId.getText().trim(), SelectedRow, 0);
+        dtm.setValueAt(txtProductS.getText().trim(), SelectedRow, 1);
+        dtm.setValueAt(txtStockS.getText().trim(), SelectedRow, 2);
+        dtm.setValueAt(txtPriceS.getText().trim(), SelectedRow, 3);
     }//GEN-LAST:event_btnAddNewpActionPerformed
 
     private void txtStockSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockSActionPerformed
@@ -494,63 +551,39 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txtStockSActionPerformed
 
     private void btnSelectPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectPActionPerformed
-       txtNewId.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 0).toString());
-       txtProductS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 1).toString());
-       txtStockS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 2).toString());
-       txtPriceS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 3).toString());
-       
-       btnAddNewp.setEnabled(true);
-       btnSelectP.setEnabled(false);
-       
-       SelectedRow = tblProducts.getSelectedRow();
-       
+        txtNewId.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 0).toString());
+        txtProductS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 1).toString());
+        txtStockS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 2).toString());
+        txtPriceS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 3).toString());
+
+        btnAddNewp.setEnabled(true);
+        btnSelectP.setEnabled(false);
+
+        SelectedRow = tblProducts.getSelectedRow();
+
     }//GEN-LAST:event_btnSelectPActionPerformed
 
     private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
-        tblProducts.isCellEditable(0,0);
+        tblProducts.isCellEditable(0, 0);
     }//GEN-LAST:event_tblProductsMouseClicked
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             new Main().setVisible(true);
         });
     }
+
     private void initObjects() {
-        var product1 = new Product();
-        product1.setProductId(1);
-        product1.setName("Arroz");
-        product1.setStock(20);
-        product1.setPrice(15000);
-        var product2 = new Product();
-        product2.setProductId(2);
-        product2.setName("Sal");
-        product2.setStock(15);
-        product2.setPrice(10000);
-        var product3 = new Product();
-        product3.setProductId(3);
-        product3.setName("Vinagre");
-        product3.setStock(25);
-        product3.setPrice(15500);
-        var product4 = new Product();
-        product4.setProductId(4);
-        product4.setName("Azúcar");
-        product4.setStock(17);
-        product4.setPrice(10000);
-        var product5 = new Product();
-        product5.setProductId(5);
-        product5.setName("Sal");
-        product5.setStock(15);
-        product5.setPrice(10500);
         
-        this.products.add(product1);
-        this.products.add(product2);
-        this.products.add(product3);
-        this.products.add(product4);
-        this.products.add(product5);
+        products = readDB();
+        
         
         ModelProductsTable model = new ModelProductsTable(this.products);
         tableRowSorter = new TableRowSorter<>(model);
         tblProducts.setRowSorter(tableRowSorter);
         tblProducts.setModel(model);
+        
+        
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -591,6 +624,5 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField txtStock;
     private javax.swing.JTextField txtStockS;
     // End of variables declaration//GEN-END:variables
-
 
 }
