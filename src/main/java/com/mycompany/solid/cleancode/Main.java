@@ -12,6 +12,10 @@ import javax.swing.table.TableRowSorter;
 
 
 public class Main extends javax.swing.JFrame {
+    
+    
+    
+    
     DefaultCellEditor cellEditor = new DefaultCellEditor(new JTextField());
     
     private final ModelProductsTable dtm;

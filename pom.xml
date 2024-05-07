@@ -11,4 +11,17 @@
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>com.mycompany.solid.cleancode.SolidCleanCode</exec.mainClass>
     </properties>
+    <dependencies>     
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
+        <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-sync</artifactId>
+        <version>5.1.0</version>
+        </dependency>
+    </dependencies>
 </project>
+
