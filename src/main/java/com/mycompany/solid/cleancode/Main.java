@@ -70,18 +70,17 @@ public class Main extends javax.swing.JFrame {
 
         mongocollection.insertOne(doc);
     }
-    
-    public void update_db(Product p){
-        
+
+    public void update_db(Product p) {
+
         BasicDBObject updated_bd = new BasicDBObject();
         updated_bd.append("Product Name", p.getName());
         updated_bd.append("Product Price", p.getPrice());
         updated_bd.append("Stock Product", p.getStock());
-        
-        mongocollection.updateOne(new BasicDBObject().append("Product Id", p.getProductId()), new BasicDBObject().append("$set",updated_bd));
 
+        mongocollection.updateOne(new BasicDBObject().append("Product Id", p.getProductId()), new BasicDBObject().append("$set", updated_bd));
 
-}
+    }
 
     private final ModelProductsTable dtm;
 
@@ -231,6 +230,11 @@ public class Main extends javax.swing.JFrame {
                 txtProductActionPerformed(evt);
             }
         });
+        txtProduct.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtProductKeyReleased(evt);
+            }
+        });
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -315,32 +319,34 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(328, 328, 328)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGap(328, 328, 328)
+                                        .addComponent(jLabel1))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(49, 49, 49)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jLabel11))
-                                    .addComponent(txtSearch))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearch))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                                .addComponent(btnDelete)))))
-                .addGap(28, 28, 28)
+                                        .addComponent(txtSearch)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnSearch))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                        .addComponent(btnDelete)))))
+                        .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -484,12 +490,12 @@ public class Main extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Product p = new Product();
         ModelProductsTable productModel = (ModelProductsTable) this.tblProducts.getModel();
-        if(products.isEmpty()){
+        if (products.isEmpty()) {
             p.setProductId(1);
-        }else{
-             p.setProductId((int) (products.getLast().getProductId()) + 1);
+        } else {
+            p.setProductId((int) (products.getLast().getProductId()) + 1);
         }
-        
+
         p.setName(txtProduct.getText());
         p.setStock(Integer.valueOf(txtStock.getText()));
         p.setPrice(Float.parseFloat(txtPrice.getText()));
@@ -497,6 +503,12 @@ public class Main extends javax.swing.JFrame {
         add_product(p);
 
         productModel.AddProduct(p);
+        
+        txtProduct.setText("");
+        txtPrice.setText("");
+        txtStock.setText("");
+        txtProduct.setEnabled(true);
+        Confirm1.setEnabled(true);
 
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -516,25 +528,37 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void Confirm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm1ActionPerformed
-
+        
+        if(txtProduct.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "It is empty, please enter a name");
+        }else{
         txtProduct.setEnabled(false);
         Confirm1.setEnabled(false);
         txtStock.setEnabled(true);
         Confirm2.setEnabled(true);
-
+        }        
     }//GEN-LAST:event_Confirm1ActionPerformed
 
     private void Confirm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm2ActionPerformed
+        if(txtStock.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "It is empty, please enter a value");
+        }else{
         txtStock.setEnabled(false);
         Confirm2.setEnabled(false);
         txtPrice.setEnabled(true);
         Confirm3.setEnabled(true);
+        }
     }//GEN-LAST:event_Confirm2ActionPerformed
 
     private void Confirm3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Confirm3ActionPerformed
+        if(txtPrice.getText().isBlank()){
+            JOptionPane.showMessageDialog(null, "It is empty, please enter a value");
+        }else{
         txtPrice.setEnabled(false);
         Confirm3.setEnabled(false);
         btnAdd.setEnabled(true);
+        
+        }
     }//GEN-LAST:event_Confirm3ActionPerformed
 
     private void txtProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductActionPerformed
@@ -546,17 +570,23 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txtProductSActionPerformed
 
     private void btnAddNewpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewpActionPerformed
-    int idp = (int) tblProducts.getValueAt(tblProducts.getSelectedRow(), 0);
-    for(Product p: products){
-        if(p.getProductId() == idp){
-            p.setName(txtProductS.getText());
-            p.setPrice(Float.parseFloat(txtPriceS.getText()));
-            p.setStock(Integer.parseInt(txtStockS.getText()));
-            update_db(p);
-            break;
+        if (txtProductS.getText().isBlank() || txtStockS.getText().isBlank() || txtPriceS.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Please update the data correctly");
+        } else {
+
+            int idp = (int) tblProducts.getValueAt(tblProducts.getSelectedRow(), 0);
+            for (Product p : products) {
+                if (p.getProductId() == idp) {
+                    p.setName(txtProductS.getText());
+                    p.setPrice(Float.parseFloat(txtPriceS.getText()));
+                    p.setStock(Integer.parseInt(txtStockS.getText()));
+                    update_db(p);
+                    break;
+                }
+            }
+            initObjects();
+
         }
-    }
-    initObjects();
     }//GEN-LAST:event_btnAddNewpActionPerformed
 
     private void txtStockSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockSActionPerformed
@@ -564,7 +594,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txtStockSActionPerformed
 
     private void btnSelectPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectPActionPerformed
-
+      
         txtProductS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 1).toString());
         txtStockS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 2).toString());
         txtPriceS.setText(dtm.getValueAt(tblProducts.getSelectedRow(), 3).toString());
@@ -573,12 +603,18 @@ public class Main extends javax.swing.JFrame {
         btnSelectP.setEnabled(false);
 
         SelectedRow = tblProducts.getSelectedRow();
+        
+        
 
     }//GEN-LAST:event_btnSelectPActionPerformed
 
     private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
         tblProducts.isCellEditable(0, 0);
     }//GEN-LAST:event_tblProductsMouseClicked
+
+    private void txtProductKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductKeyReleased
+       
+    }//GEN-LAST:event_txtProductKeyReleased
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             new Main().setVisible(true);
