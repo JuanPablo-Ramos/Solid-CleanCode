@@ -25,10 +25,6 @@ public class ModelProductsTable extends AbstractTableModel {
         this.fireTableDataChanged();
     }
     
-    public void removeProduct(){
-        this.products.removeLast();
-        this.fireTableDataChanged();
-    }
     
     @Override
     public int getRowCount() {

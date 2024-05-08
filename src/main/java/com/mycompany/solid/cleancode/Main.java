@@ -2,6 +2,7 @@
 //Tuvimos problemas a la hora de hacer usar el modelo de la tabla para actualizar una linea de codigo
 package com.mycompany.solid.cleancode;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;
 import com.mongodb.ServerAddress;
@@ -41,36 +42,34 @@ public class Main extends javax.swing.JFrame {
         }
         return mongo;
     }
-    
-    public List<Product> readDB(){
-        
+
+    public List<Product> readDB() {
+
         List<Product> readList = new ArrayList();
-        for (Document doc: mongocollection.find()){
-         
+        for (Document doc : mongocollection.find()) {
+
             Product p = new Product();
             p.setProductId(doc.getInteger("Product Id"));
             p.setName(doc.getString("Product Name"));
             p.setPrice(doc.getDouble("Product Price").floatValue());
             p.setStock(doc.getInteger("Stock Product"));
-            
+
             readList.add(p);
-        
-        
+
         }
         return readList;
     }
-    
-    public void add_product(Product p){
-        
+
+    public void add_product(Product p) {
+
         Document doc = new Document();
         doc.put("Product Id", p.getProductId());
         doc.put("Product Name", p.getName());
         doc.put("Product Price", p.getPrice());
         doc.put("Stock Product", p.getStock());
-        
+
         mongocollection.insertOne(doc);
     }
-    
 
     private final ModelProductsTable dtm;
 
@@ -80,9 +79,9 @@ public class Main extends javax.swing.JFrame {
     TableRowSorter<ModelProductsTable> tableRowSorter = new TableRowSorter<>();
 
     public Main() {
-        
+
         createConnection();
-        
+
         initComponents();
         initObjects();
 
@@ -286,7 +285,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel12.setBackground(new java.awt.Color(153, 153, 255));
         jLabel12.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
-        jLabel12.setText("REMOVE LAST PRODUCT:");
+        jLabel12.setText("REMOVE SELECTED PRODUCT");
         jLabel12.setOpaque(true);
 
         btnSelectP.setBackground(new java.awt.Color(0, 153, 204));
@@ -306,31 +305,34 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addComponent(jLabel11))
-                                .addComponent(txtSearch))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnSearch))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(328, 328, 328)
-                            .addComponent(jLabel1)
-                            .addGap(0, 0, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel12)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                            .addComponent(btnDelete)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(328, 328, 328)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel11))
+                                    .addComponent(txtSearch))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSearch))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                .addComponent(btnDelete)))))
                 .addGap(28, 28, 28)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,7 +410,7 @@ public class Main extends javax.swing.JFrame {
                                                         .addGap(36, 36, 36)
                                                         .addComponent(jLabel8)
                                                         .addGap(11, 11, 11)))))
-                                        .addGap(0, 9, Short.MAX_VALUE)))))
+                                        .addGap(0, 8, Short.MAX_VALUE)))))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -483,23 +485,28 @@ public class Main extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         Product p = new Product();
         ModelProductsTable productModel = (ModelProductsTable) this.tblProducts.getModel();
-        p.setProductId(productModel.getRowCount() + 1);
+        if(products.isEmpty()){
+            p.setProductId(1);
+        }else{
+             p.setProductId((int) (products.getLast().getProductId()) + 1);
+        }
+        
         p.setName(txtProduct.getText());
         p.setStock(Integer.valueOf(txtStock.getText()));
         p.setPrice(Float.parseFloat(txtPrice.getText()));
-        
+
         add_product(p);
 
         productModel.AddProduct(p);
-        
-        
-
 
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         ModelProductsTable productModel = (ModelProductsTable) this.tblProducts.getModel();
-        productModel.removeProduct();
+        mongocollection.deleteOne(new BasicDBObject().append("Product Id", tblProducts.getModel().getValueAt(tblProducts.getSelectedRow(), 0)));
+        productModel.fireTableDataChanged();
+        initObjects();
+
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -573,17 +580,14 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void initObjects() {
-        
+
         products = readDB();
-        
-        
+
         ModelProductsTable model = new ModelProductsTable(this.products);
         tableRowSorter = new TableRowSorter<>(model);
         tblProducts.setRowSorter(tableRowSorter);
         tblProducts.setModel(model);
-        
-        
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
